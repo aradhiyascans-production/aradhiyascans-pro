@@ -120,18 +120,8 @@ export default function Footer() {
         </div>
 
         {/* Legal Disclaimer */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-y-4 text-xs text-brand-ivory/40">
-          <div className="text-center sm:text-left">
-            &copy; {currentYear} Aradhiya Scans & Lab. All rights reserved.
-          </div>
-          <div className="flex gap-x-6">
-            <Link href="/privacy" className="hover:text-brand-ivory transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-brand-ivory transition-colors">
-              Terms of Service
-            </Link>
-          </div>
+        <div className="pt-8 text-center sm:text-left text-xs text-brand-ivory/40">
+          &copy; {currentYear} Aradhiya Scans & Lab. All rights reserved.
         </div>
       </div>
     </footer>
