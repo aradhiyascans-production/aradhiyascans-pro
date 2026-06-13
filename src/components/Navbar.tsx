@@ -14,7 +14,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Health Packages', href: '/packages' },
+  { label: 'Test & Package', href: '/tests' },
   { label: 'About Us', href: '/about' },
   { label: 'Patient Guide', href: '/guide' },
   { label: 'Contact', href: '/contact' }
@@ -46,8 +46,8 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled 
-          ? 'py-4 bg-brand-cream/80 backdrop-blur-md shadow-sm border-b border-brand-charcoal/5' 
-          : 'py-6 bg-brand-cream/40 backdrop-blur-xs'
+          ? 'py-2.5 bg-brand-cream/80 backdrop-blur-md shadow-sm border-b border-brand-charcoal/5' 
+          : 'py-3 bg-brand-cream/40 backdrop-blur-xs'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">

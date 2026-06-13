@@ -1,0 +1,5 @@
+Successfully scheduled one-shot timer.
+Expected to fire at: 2026-06-12T11:24:27+05:30
+Prompt: Check if db inspector finished
+
+[2026-06-12T11:24:27+05:30] Timer fired.

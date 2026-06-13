@@ -15,13 +15,6 @@ import {
 import SEO from '@/components/SEO';
 
 export default function AboutPage() {
-  const timelineEvents = [
-    { year: '2022', title: 'Foundational Beginnings', desc: 'Established in Chidambaram to provide reliable pathology laboratory testing and basic cardiac diagnostic traces.' },
-    { year: '2023', title: 'Digital Radiography Systems', desc: 'Installed low-radiation digital X-Ray equipment, significantly increasing clinical imaging safety.' },
-    { year: '2024', title: 'Automated Pathology Tracks', desc: 'Introduced robotic chemical analyzers with barcode tracking to safeguard specimen routes.' },
-    { year: '2025', title: 'Advanced CT Scan Imaging', desc: 'Acquired multi-slice computed tomography scanners, introducing precision imaging diagnostics.' },
-    { year: 'Present', title: 'Continuing Precision Care', desc: 'Providing comprehensive, verified diagnostic services trusted by local physicians and families.' }
-  ];
 
 
 
@@ -45,7 +38,7 @@ export default function AboutPage() {
             </div>
             <div className="lg:col-span-5 relative w-full h-[320px] rounded-3xl overflow-hidden border border-brand-charcoal/5 shadow-md bg-brand-white">
               <Image
-                src="/images/about_hero.png"
+                src="/images/premium_about_hero_v3.png"
                 alt="Aradhiya Scans Premium Diagnostics Environment"
                 fill
                 sizes="(max-w-7xl) 40vw, 100vw"
@@ -88,39 +81,66 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* SECTION 2: STYLISH VERTICAL TIMELINE */}
-          <section className="space-y-16">
+          {/* SECTION 2: TRUST & CERTIFICATION POINTS */}
+          <section className="space-y-12">
             <div className="text-center max-w-2xl mx-auto space-y-4">
-              <span className="text-xs uppercase tracking-widest text-brand-gold font-semibold">Our Progress</span>
+              <span className="text-xs uppercase tracking-widest text-brand-gold font-semibold">Why Patients Trust Us</span>
               <h2 className="font-serif text-3xl sm:text-4xl font-medium text-brand-charcoal">
-                Evolution of Accuracy
+                Built on Clinical Integrity & Precision
               </h2>
+              <p className="font-sans text-sm text-brand-charcoal/70 leading-relaxed">
+                Every scan and specimen analysis at Aradhiya is governed by rigid quality parameters designed to ensure promptness, clarity, and precision.
+              </p>
             </div>
 
-            <div className="relative max-w-3xl mx-auto before:absolute before:left-4 md:before:left-1/2 before:top-4 before:bottom-4 before:w-[1px] before:bg-brand-emerald/10">
-              {timelineEvents.map((evt, idx) => (
-                <div key={idx} className={`relative flex flex-col md:flex-row gap-8 mb-12 ${idx % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                  
-                  {/* Timeline Dot */}
-                  <div className="absolute left-4 md:left-1/2 w-3.5 h-3.5 bg-brand-emerald border-2 border-brand-cream rounded-full -translate-x-[6.5px] top-1 z-10" />
-
-                  {/* Empty space on opposite side for desktop symmetry */}
-                  <div className="w-full md:w-1/2 hidden md:block" />
-
-                  {/* Content Box */}
-                  <div className="w-full md:w-1/2 pl-8 md:pl-0 md:px-8 text-left space-y-2">
-                    <span className="font-serif text-2xl font-light text-brand-gold block leading-none">
-                      {evt.year}
-                    </span>
-                    <h4 className="font-serif text-lg font-semibold text-brand-charcoal">
-                      {evt.title}
-                    </h4>
-                    <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed">
-                      {evt.desc}
-                    </p>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              <div className="bg-brand-white p-8 rounded-3xl border border-brand-charcoal/5 flex gap-6 items-start">
+                <div className="p-3 bg-brand-cream border border-brand-charcoal/5 rounded-2xl text-brand-emerald shrink-0">
+                  <ShieldCheck className="h-6 w-6" />
                 </div>
-              ))}
+                <div className="space-y-2 text-left">
+                  <h3 className="font-serif text-lg font-medium text-brand-charcoal">Double-Verified Reports</h3>
+                  <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed">
+                    All findings are cross-examined. Critical and abnormal values are automatically double-checked by our senior pathologists and radiologist teams before final dispatch.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-brand-white p-8 rounded-3xl border border-brand-charcoal/5 flex gap-6 items-start">
+                <div className="p-3 bg-brand-cream border border-brand-charcoal/5 rounded-2xl text-brand-emerald shrink-0">
+                  <Cpu className="h-6 w-6" />
+                </div>
+                <div className="space-y-2 text-left">
+                  <h3 className="font-serif text-lg font-medium text-brand-charcoal">Calibrated Diagnostics</h3>
+                  <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed">
+                    Our analyzers, CT scanners, and ultrasound units undergo strict daily calibration checks. We match performance against global control standards every single morning.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-brand-white p-8 rounded-3xl border border-brand-charcoal/5 flex gap-6 items-start">
+                <div className="p-3 bg-brand-cream border border-brand-charcoal/5 rounded-2xl text-brand-emerald shrink-0">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div className="space-y-2 text-left">
+                  <h3 className="font-serif text-lg font-medium text-brand-charcoal">Certified Clinical Team</h3>
+                  <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed">
+                    Our phlebotomists and technologists hold professional certifications and undergo regular medical training. Your samples and scans are in safe, experienced hands.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-brand-white p-8 rounded-3xl border border-brand-charcoal/5 flex gap-6 items-start">
+                <div className="p-3 bg-brand-cream border border-brand-charcoal/5 rounded-2xl text-brand-emerald shrink-0">
+                  <Award className="h-6 w-6" />
+                </div>
+                <div className="space-y-2 text-left">
+                  <h3 className="font-serif text-lg font-medium text-brand-charcoal">Physician-Approved Formats</h3>
+                  <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed">
+                    Reports are structured to highlight reference intervals and crucial diagnostic findings clearly, allowing your consulting physician to plan treatment with complete confidence.
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 

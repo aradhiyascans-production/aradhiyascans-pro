@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingFAB from "@/components/BookingFAB";
+import { Toaster } from "sonner";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   description: "Experience premium, accurate diagnostics in Chidambaram. Offering high-resolution CT Scan, Digital X-Ray, ECG, Echocardiography, and comprehensive laboratory diagnostics.",
   keywords: [
     "Aradhiya Scans", "Aradhiya Lab", "Aradhiya Scans Chidambaram", "Diagnostic Lab Chidambaram",
-    "CT Scan Chidambaram", "X-Ray Chidambaram", "Blood Test Chidambaram", "Health Packages Chidambaram",
+    "CT Scan Chidambaram", "X-Ray Chidambaram", "Blood Test Chidambaram", "Diagnostics Chidambaram",
     "Echocardiography Chidambaram", "Best Lab in Chidambaram", "Tamil Nadu Lab", "Aradhiya Scans and Lab"
   ],
   authors: [{ name: "Aradhiya Scans & Lab" }],
@@ -61,6 +62,15 @@ export default function RootLayout({
         </main>
         <Footer />
         <BookingFAB />
+        <Toaster position="top-right" toastOptions={{
+          style: {
+            fontFamily: 'var(--font-plus-jakarta-sans), sans-serif',
+            background: '#FFFFFF',
+            border: '1px solid rgba(26, 26, 26, 0.05)',
+            color: '#1A1A1A',
+            borderRadius: '16px',
+          }
+        }} />
       </body>
     </html>
   );

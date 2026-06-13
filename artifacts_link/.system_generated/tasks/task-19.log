@@ -1,0 +1,42 @@
+Creating a new Next.js app in D:\All Projects\Aaradhya Scans\aaradhya-scans.
+
+Using npm.
+
+Initializing project with template: app-tw 
+
+
+Installing dependencies:
+- next
+- react
+- react-dom
+
+Installing devDependencies:
+- @tailwindcss/postcss
+- @types/node
+- @types/react
+- @types/react-dom
+- eslint
+- eslint-config-next
+- tailwindcss
+- typescript
+
+
+added 359 packages, and audited 360 packages in 2m
+
+143 packages are looking for funding
+  run `npm fund` for details
+
+2 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+Generating route types...
+✓ Types generated successfully
+
+Initialized a git repository.
+
+Success! Created aaradhya-scans at D:\All Projects\Aaradhya Scans\aaradhya-scans
+

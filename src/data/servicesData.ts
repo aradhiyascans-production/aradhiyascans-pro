@@ -1,7 +1,7 @@
 export interface ServiceDetail {
   id: string;
   name: string;
-  category: 'imaging' | 'cardiac' | 'laboratory' | 'preventive';
+  category: 'imaging' | 'cardiac' | 'laboratory';
   shortDescription: string;
   overview: string;
   whoNeedsIt: string[];
@@ -12,6 +12,46 @@ export interface ServiceDetail {
 }
 
 export const servicesData: ServiceDetail[] = [
+  {
+    id: 'ultrasound',
+    name: 'Ultrasound Scan',
+    category: 'imaging',
+    shortDescription: 'Non-invasive high-frequency sound wave diagnostic mapping internal organs, abdominal structures, and obstetric growth.',
+    overview: 'Ultrasound imaging (sonography) uses high-frequency sound waves to capture real-time images of the inside of your body. It is completely safe, does not use ionizing radiation, and is widely used to evaluate abdominal organs, monitor fetal development during pregnancy, check blood vessels, and guide minimally-invasive diagnostic procedures.',
+    whoNeedsIt: [
+      'Pregnant individuals requiring routine fetal growth and safety monitoring',
+      'Patients experiencing abdominal or pelvic pain, swelling, or digestive issues',
+      'Individuals requiring evaluation of thyroid glands, gallstones, or liver status',
+      'Patients needing blood flow dynamics checked via Doppler ultrasound'
+    ],
+    prepGuidelines: [
+      'For abdominal scans, fast for 6 to 8 hours prior to the scan (no food or fatty liquids).',
+      'For pelvic and obstetric scans, drink 32 ounces of water 1 hour before the exam and do not empty your bladder.',
+      'Wear comfortable, two-piece loose clothing for easy access to the skin.'
+    ],
+    procedure: [
+      'You will lie on a clean examination table, exposing the area of study.',
+      'A clear, warm water-soluble gel is applied to the skin, helping the transducer waves transmit without air pockets.',
+      'The certified sonographer slides the transducer probe across your skin to capture dynamic real-time frames.',
+      'The procedure is completely painless, silent, and takes around 20 to 30 minutes.'
+    ],
+    benefits: [
+      'Zero radiation exposure, making it completely safe for pregnant mothers and children',
+      'Dynamic, real-time imaging showing moving structures like heartbeats or blood flow',
+      'Completely painless and non-invasive diagnostic method',
+      'Highly effective at detailing soft tissues that do not show up well on standard X-rays'
+    ],
+    faqs: [
+      {
+        question: 'Is ultrasound safe during pregnancy?',
+        answer: 'Yes, diagnostic ultrasound has been used for decades with no known harmful side effects. It uses gentle sound waves rather than ionizing radiation (X-rays).'
+      },
+      {
+        question: 'Why do I need a full bladder for a pelvic scan?',
+        answer: 'A full bladder pushes your intestines out of the pelvic area and acts as a clear visual window, allowing sound waves to transmit easily to display the uterus and ovaries.'
+      }
+    ]
+  },
   {
     id: 'ct-scan',
     name: 'CT Scan',
@@ -328,68 +368,43 @@ export const servicesData: ServiceDetail[] = [
     ]
   },
   {
-    id: 'executive-health-packages',
-    name: 'Executive Health Packages',
-    category: 'preventive',
-    shortDescription: 'A premium, comprehensive diagnostic screen combining advanced imaging, cardiac checks, and clinical blood profiling.',
-    overview: 'Our Executive Health Package is designed for busy individuals who want a complete, thorough diagnostic check of their entire health status in a single day. This premium screening goes beyond basic tests, including comprehensive blood chemistry, metabolic panels, cardiac testing, and diagnostic imaging.',
+    id: 'eeg',
+    name: 'EEG (Electroencephalogram)',
+    category: 'imaging',
+    shortDescription: 'Advanced diagnostic recording of brain electrical activity to detect seizures, epilepsy, and cognitive conditions.',
+    overview: 'An Electroencephalogram (EEG) is a non-invasive diagnostic test that detects and records electrical activity in your brain using small, metal discs (electrodes) attached to your scalp. Brain cells communicate via electrical impulses and are active all the time, even during sleep. This activity shows up as wavy lines on an EEG recording, allowing neurologists to analyze brainwave patterns, identify irregularities, and diagnose epilepsy, sleep disorders, and other encephalopathic conditions.',
     whoNeedsIt: [
-      'Busy professionals seeking a proactive, all-in-one yearly health assessment',
-      'Individuals over 35 looking to establish a robust baseline of physical health',
-      'People with stressful lifestyles, irregular sleep patterns, or family histories of disease'
+      'Patients experiencing unexplained seizures, blackouts, or convulsions',
+      'Individuals being evaluated for epilepsy or brain wave irregularities',
+      'Patients with persistent sleep disturbances, sleep apnea, or narcolepsy',
+      'Individuals recovering from head injuries or experiencing confusion, memory loss, or cognitive decline'
     ],
     prepGuidelines: [
-      'Fast for 10 to 12 hours (water is permitted) before arriving at the laboratory.',
-      'Bring a sample of first-morning urine if requested, or collect it at our center.',
-      'Wear comfortable clothing and walking shoes as cardiac tests may be included.',
-      'Bring copies of any previous health reports or chronic medications.'
+      'Wash your hair the night before or the morning of the test. Do not use hair oils, sprays, gels, or conditioners, as they make it difficult for the electrodes to stick.',
+      'Avoid consuming caffeine (coffee, tea, cola, or chocolate) for at least 8 to 12 hours before the test.',
+      'Unless instructed otherwise by your doctor, take your usual medications as scheduled. Provide a list of all medications you take to our technician.'
     ],
     procedure: [
-      'You will undergo a series of tests scheduled sequentially for maximum convenience.',
-      'This includes sample collection (blood/urine), an ECG, chest digital X-ray, and abdominal ultrasound or sonomammography.',
-      'A light, complimentary breakfast is served after the fasting blood draw is complete.'
+      'You will sit in a comfortable reclining chair or lie on a bed in our diagnostic room.',
+      'A technician will measure your head and mark spots on your scalp where electrodes will be placed.',
+      'Electrodes are attached to your scalp using a special adhesive paste. The electrodes are connected by wires to the EEG machine.',
+      'During the recording, you will be asked to relax, close your eyes, and perform simple tasks like breathing deeply (hyperventilation) or looking at a flashing light.',
+      'The recording is completely painless, silent, and typically takes 45 to 60 minutes.'
     ],
     benefits: [
-      'Complete peace of mind through a comprehensive, multi-system wellness scan',
-      'Early detection of diabetes, renal disease, liver stress, and cardiovascular issues',
-      'Saves time by grouping multiple vital diagnostics into a single coordinated visit'
+      'Non-invasive and completely painless brain wave diagnostic method',
+      'Highly sensitive in detecting epileptic seizures and sub-clinical seizure patterns',
+      'Provides crucial baseline diagnostics for memory disorders, sleep apnea, and confusion',
+      'Helps physicians monitor and adjust treatments for neurological conditions'
     ],
     faqs: [
       {
-        question: 'How long does the entire package screening take?',
-        answer: 'The executive package takes approximately 3 to 4 hours to complete. We structure the timeline to minimize wait times, and we serve you breakfast mid-way.'
-      }
-    ]
-  },
-  {
-    id: 'annual-health-checkups',
-    name: 'Annual Health Checkups',
-    category: 'preventive',
-    shortDescription: 'Core yearly diagnostics designed for essential health tracking, organ function monitoring, and prevention.',
-    overview: 'The Annual Health Checkup is your cornerstone for long-term health tracking. It evaluates essential markers including complete blood counts, blood sugar, kidney function, liver enzymes, and lipid profiles. Routine yearly screening is key to catching subtle metabolic deviations before they escalate.',
-    whoNeedsIt: [
-      'All adults of any age seeking to maintain a yearly log of their health status',
-      'Individuals managing controlled, stable chronic conditions',
-      'Families looking for reliable, preventive health check routines'
-    ],
-    prepGuidelines: [
-      'Fast for 8 to 10 hours prior to sample collection.',
-      'Avoid heavy exercise the morning of the test.'
-    ],
-    procedure: [
-      'You will visit our center for a fast blood sample collection and urinalysis.',
-      'A basic vitals assessment (blood pressure, heart rate, BMI) is performed.',
-      'Your results are compiled into an easy-to-read comparative digital report.'
-    ],
-    benefits: [
-      'Maintains a clear year-over-year record of critical biological markers',
-      'Catches early warnings of anemia, metabolic stress, and inflammatory shifts',
-      'A highly cost-effective, standard preventive care routine'
-    ],
-    faqs: [
+        question: 'Does an EEG shock my brain or hurt?',
+        answer: 'No, the EEG only records electrical activity coming from your brain. It does not send any electricity or shocks into your body, and it is completely painless.'
+      },
       {
-        question: 'Can I drink coffee or tea before the test?',
-        answer: 'No, please drink only plain water during your fasting period. Coffee, tea, and juice contain substances that can throw off liver enzyme and blood sugar results.'
+        question: 'How long does it take to get EEG results?',
+        answer: 'The raw EEG recording is analyzed by our senior consultant neurologist. Verified digital reports are compiled and available within 24 hours.'
       }
     ]
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { servicesData } from '@/data/servicesData';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -22,40 +23,19 @@ export default function Footer() {
             <p className="text-sm text-brand-ivory/60 leading-relaxed max-w-sm">
               An advanced clinical facility focusing on high-resolution imaging, meticulous pathology, and patient-centered diagnostic care in Chidambaram, Tamil Nadu.
             </p>
-            <div className="text-xs text-brand-gold font-medium tracking-widest uppercase">
-              ISO 9001:2015 & Quality Compliant
-            </div>
           </div>
 
           {/* Core Diagnostics Directory */}
           <div className="space-y-6">
             <h4 className="font-serif text-lg font-medium text-brand-gold">Diagnostics</h4>
             <ul className="space-y-3 text-sm text-brand-ivory/70">
-              <li>
-                <Link href="/services#ct-scan" className="hover:text-brand-ivory transition-colors">
-                  Multi-Slice CT Scan
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#digital-x-ray" className="hover:text-brand-ivory transition-colors">
-                  Digital Radiography (X-Ray)
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#echocardiography" className="hover:text-brand-ivory transition-colors">
-                  Echocardiography (Eco)
-                </Link>
-              </li>
-              <li>
-                <Link href="/services#blood-tests" className="hover:text-brand-ivory transition-colors">
-                  Comprehensive Pathology
-                </Link>
-              </li>
-              <li>
-                <Link href="/packages" className="hover:text-brand-ivory transition-colors">
-                  Preventive Health Packages
-                </Link>
-              </li>
+              {servicesData.map((service) => (
+                <li key={service.id}>
+                  <Link href={`/services/${service.id}`} className="hover:text-brand-ivory transition-colors">
+                    {service.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -80,6 +60,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/tests" className="hover:text-brand-ivory transition-colors">
+                  Book Tests & Packages
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-brand-ivory transition-colors">
                   Book an Appointment
                 </Link>
@@ -96,9 +81,9 @@ export default function Footer() {
                 <span>
                   39B, Theradi Kovil Street,
                   <br />
-                  Gandhi Nagar, Chidambaram - 608001,
+                  (Opp.) Venus Matriculation School,
                   <br />
-                  Tamil Nadu, India
+                  Chidambaram - 608001, Tamil Nadu, India
                 </span>
               </li>
               <li className="flex items-center gap-x-3">

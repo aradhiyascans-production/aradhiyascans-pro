@@ -15,7 +15,7 @@ export default function SEO() {
     'priceRange': '$$',
     'address': {
       '@type': 'PostalAddress',
-      'streetAddress': '39B, Theradi Kovil Street, Gandhi Nagar',
+      'streetAddress': '39B, Theradi Kovil Street, (Opp.) Venus Matriculation School',
       'addressLocality': 'Chidambaram',
       'addressRegion': 'Tamil Nadu',
       'postalCode': '608001',

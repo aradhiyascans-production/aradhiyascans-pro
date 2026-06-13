@@ -1,41 +1,37 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
   Cpu, 
   Activity, 
   FlaskConical, 
-  HeartHandshake, 
-  Clock, 
-  AlertCircle,
-  HelpCircle,
-  CheckCircle2,
-  ArrowRight
+  Sparkles,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { servicesData, ServiceDetail } from '@/data/servicesData';
 
 const serviceImages: Record<string, string> = {
-  'ct-scan': '/images/ct_scan.png',
+  'ultrasound': '/images/premium_ultrasound.png',
+  'ct-scan': '/images/premium_ct_scan.png',
   'digital-x-ray': '/images/xray.png',
-  'sonomammography': '/images/ultrasound.png',
+  'sonomammography': '/images/premium_sonomammography_v2.png',
+  'eeg': '/images/premium_eeg.png',
   'ecg': '/images/ecg.png',
   'echocardiography': '/images/echo.png',
-  'blood-tests': '/images/lab.png',
-  'urine-analysis': '/images/lab.png',
-  'hormone-testing': '/images/lab.png',
-  'cholesterol-screening': '/images/lab.png',
-  'executive-health-packages': '/images/preventive.png',
-  'annual-health-checkups': '/images/preventive.png',
+  'blood-tests': '/images/premium_blood_tests.png',
+  'urine-analysis': '/images/premium_urinalysis.png',
+  'hormone-testing': '/images/premium_hormone_testing.png',
+  'cholesterol-screening': '/images/premium_lipid_panel.png',
 };
 
 export default function ServicesPage() {
-  const [activeCategory, setActiveCategory] = useState<'all' | 'imaging' | 'cardiac' | 'laboratory' | 'preventive'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'imaging' | 'cardiac' | 'laboratory'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedService, setSelectedService] = useState<ServiceDetail>(servicesData[0]);
-  const detailsRef = useRef<HTMLDivElement>(null);
 
   // Filtered list based on search and category
   const filteredServices = servicesData.filter((service) => {
@@ -46,260 +42,166 @@ export default function ServicesPage() {
     return matchesCategory && matchesSearch;
   });
 
-  // Automatically select the first item of a filtered list if current selection is excluded
-  useEffect(() => {
-    if (filteredServices.length > 0 && !filteredServices.find(s => s.id === selectedService.id)) {
-      setSelectedService(filteredServices[0]);
-    }
-  }, [activeCategory, searchQuery, filteredServices, selectedService]);
-
-  const scrollToDetails = (service: ServiceDetail) => {
-    setSelectedService(service);
-    if (window.innerWidth < 1024) {
-      setTimeout(() => {
-        detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
-    }
-  };
-
   const categories = [
     { id: 'all', label: 'All Diagnostics', icon: null },
     { id: 'imaging', label: 'Imaging', icon: Cpu },
     { id: 'cardiac', label: 'Cardiac', icon: Activity },
-    { id: 'laboratory', label: 'Pathology Lab', icon: FlaskConical },
-    { id: 'preventive', label: 'Preventive Care', icon: HeartHandshake }
-  ];
+    { id: 'laboratory', label: 'Pathology Lab', icon: FlaskConical }
+  ] as const;
 
   return (
-    <div className="bg-brand-cream min-h-screen py-12 lg:py-20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <div className="bg-brand-cream min-h-screen py-12 lg:py-20 font-sans text-brand-charcoal relative overflow-hidden">
+      {/* Background glow effects */}
+      <div className="absolute left-[-10%] top-[5%] w-[45%] h-[45%] rounded-full bg-brand-emerald/5 blur-3xl pointer-events-none" />
+      <div className="absolute right-[-10%] top-[25%] w-[40%] h-[40%] rounded-full bg-brand-gold/5 blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
         {/* Header Block */}
-        <div className="max-w-3xl text-left mb-16 space-y-4">
-          <span className="text-xs uppercase tracking-widest text-brand-gold font-semibold">Diagnostic Catalog</span>
-          <h1 className="font-serif text-4xl sm:text-5xl font-light tracking-tight text-brand-charcoal">
-            Clinical Capabilities & Guidance
+        <div className="max-w-3xl text-left mb-12 lg:mb-16 space-y-4">
+          <div className="inline-flex items-center gap-x-2 px-3 py-1.5 rounded-full border border-brand-emerald/10 bg-brand-emerald/5 text-[10px] font-bold tracking-widest text-brand-emerald uppercase shadow-xs">
+            <Sparkles className="h-3 w-3 text-brand-gold" />
+            Clinical Guidance
+          </div>
+          <h1 className="font-serif text-4xl sm:text-5xl font-light tracking-tight text-brand-charcoal leading-none">
+            Diagnostic <span className="bg-gradient-to-r from-brand-emerald to-brand-emerald-dark bg-clip-text text-transparent font-normal">Services</span> <br />
+            & Pre-test <span className="font-serif italic font-normal text-brand-gold-dark">Guidelines.</span>
           </h1>
-          <p className="font-sans text-sm sm:text-base text-brand-charcoal/70 leading-relaxed">
-            Detailed information on preparations, procedures, and timelines for our complete testing directory in Chidambaram.
+          <p className="text-xs sm:text-sm text-brand-charcoal/70 leading-relaxed max-w-xl font-medium">
+            Browse core scanning procedures, cardiac monitoring tracings, and pathology lab requirements at Aradhiya Scans & Lab.
           </p>
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-center">
-          {/* Categories Tab Grid */}
-          <div className="lg:col-span-8 flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id as any)}
-                className={`px-5 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 flex items-center gap-x-2 border cursor-pointer ${
-                  activeCategory === cat.id
-                    ? 'bg-brand-emerald text-brand-cream border-transparent shadow-sm'
-                    : 'bg-brand-white text-brand-charcoal/70 border-brand-charcoal/5 hover:border-brand-emerald/20 hover:text-brand-charcoal'
-                }`}
-              >
-                {cat.icon && <cat.icon className="h-3.5 w-3.5" />}
-                {cat.label}
-              </button>
+        <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-5 sm:p-6 lg:p-8 shadow-xs space-y-5 lg:space-y-6 mb-12 text-left relative overflow-hidden">
+          <div className="absolute right-0 top-0 w-32 h-32 bg-brand-cream rounded-full blur-2xl pointer-events-none opacity-50" />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
+            {/* Search Box */}
+            <div className="lg:col-span-12 relative">
+              <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-brand-charcoal/30" />
+              <input
+                type="text"
+                placeholder="Search diagnostic capabilities, procedures, or instructions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3.5 rounded-full border border-brand-charcoal/10 bg-brand-cream/30 text-xs text-brand-charcoal focus:outline-none focus:border-brand-gold/30 focus:ring-1 focus:ring-brand-gold/20 transition-all font-semibold placeholder-brand-charcoal/30 shadow-2xs"
+              />
+            </div>
+          </div>
+
+          {/* Categories Tab Bar */}
+          <div className="border-t border-brand-charcoal/5 pt-5 lg:pt-6 flex overflow-x-auto scrollbar-none whitespace-nowrap gap-2 pb-1.5 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-0 lg:px-0">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id as any)}
+                  className={`px-5 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 border cursor-pointer shrink-0 flex items-center gap-x-1.5 ${
+                    isActive
+                      ? 'bg-brand-emerald text-brand-cream border-transparent shadow-xs'
+                      : 'bg-brand-cream text-brand-charcoal/70 border-brand-charcoal/5 hover:border-brand-gold/20 hover:text-brand-charcoal'
+                  }`}
+                >
+                  {Icon && <Icon className="h-3.5 w-3.5" />}
+                  {cat.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Services Grid Layout */}
+        {filteredServices.length > 0 ? (
+          <div className="grid gap-6 sm:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {filteredServices.map((service) => (
+              <ServiceCard key={service.id} service={service} />
             ))}
           </div>
+        ) : (
+          <div className="py-20 bg-brand-white border border-brand-charcoal/5 rounded-3xl shadow-xs text-center space-y-4 max-w-xl mx-auto">
+            <p className="text-sm font-semibold text-brand-charcoal/60">No diagnostic service matches your criteria.</p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setActiveCategory('all');
+              }}
+              className="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-cream border border-brand-charcoal/10 text-brand-charcoal hover:border-brand-emerald/30 transition cursor-pointer"
+            >
+              Reset Filters
+            </button>
+          </div>
+        )}
 
-          {/* Search Box */}
-          <div className="lg:col-span-4 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-charcoal/40" />
-            <input
-              type="text"
-              placeholder="Search tests or codes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-full bg-brand-white border border-brand-charcoal/5 text-xs text-brand-charcoal focus:outline-none focus:border-brand-emerald/30 focus:ring-1 focus:ring-brand-emerald/30 transition-all shadow-xs"
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({ service }: { service: ServiceDetail }) {
+  return (
+    <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-6 sm:p-7 flex flex-col justify-between hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
+      {/* Premium Gold Accent Glow */}
+      <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-brand-gold/5 rounded-full blur-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+
+      <div>
+        {/* Diagnostic Type Tag */}
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
+            {service.category === 'imaging' ? 'Imaging' :
+             service.category === 'cardiac' ? 'Cardiac' :
+             'Pathology Lab'}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 className="font-serif text-lg font-semibold tracking-tight text-brand-charcoal group-hover:text-brand-emerald transition-colors leading-snug line-clamp-2 mt-2 mb-2 pr-6">
+          {service.name}
+        </h3>
+
+        {/* Short Description */}
+        <p className="text-xs text-brand-charcoal/65 leading-relaxed line-clamp-3 mb-4 font-medium">
+          {service.shortDescription}
+        </p>
+
+        {/* Service Clinical Image */}
+        {serviceImages[service.id] && (
+          <div className="relative w-full h-36 rounded-2xl overflow-hidden border border-brand-charcoal/5 bg-brand-cream mb-4">
+            <Image
+              src={serviceImages[service.id]}
+              alt={service.name}
+              fill
+              sizes="(max-w-7xl) 33vw, 100vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
             />
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Two-Column Explorer Layout (iPad settings style) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: List of Services */}
-          <div className="lg:col-span-5 space-y-3 max-h-[70vh] overflow-y-auto pr-2">
-            {filteredServices.length > 0 ? (
-              filteredServices.map((service) => {
-                const isSelected = selectedService.id === service.id;
-                return (
-                  <button
-                    key={service.id}
-                    onClick={() => scrollToDetails(service)}
-                    className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between group cursor-pointer ${
-                      isSelected
-                        ? 'bg-brand-emerald text-brand-cream border-transparent shadow-lg shadow-brand-emerald/10'
-                        : 'bg-brand-white text-brand-charcoal border-brand-charcoal/5 hover:border-brand-gold/20 hover:shadow-md'
-                    }`}
-                  >
-                    <div className="space-y-1 max-w-[85%]">
-                      <span className={`text-[9px] uppercase tracking-wider font-bold ${isSelected ? 'text-brand-gold' : 'text-brand-gold-dark'}`}>
-                        {service.category === 'imaging' ? 'Imaging Scan' :
-                         service.category === 'cardiac' ? 'Cardiac Trace' :
-                         service.category === 'laboratory' ? 'Pathology Lab' : 'Wellness Check'}
-                      </span>
-                      <h3 className="font-serif text-lg font-medium tracking-tight truncate">
-                        {service.name}
-                      </h3>
-                      <p className={`text-[11px] line-clamp-1 leading-normal ${isSelected ? 'text-brand-cream/80' : 'text-brand-charcoal/60'}`}>
-                        {service.shortDescription}
-                      </p>
-                    </div>
-                    <ArrowRight className={`h-4 w-4 shrink-0 transition-transform duration-300 ${
-                      isSelected ? 'text-brand-gold translate-x-1' : 'text-brand-charcoal/40 group-hover:translate-x-1 group-hover:text-brand-charcoal'
-                    }`} />
-                  </button>
-                );
-              })
-            ) : (
-              <div className="bg-brand-white p-8 rounded-2xl border border-brand-charcoal/5 text-center text-brand-charcoal/50 text-xs font-sans">
-                No diagnostic service found matching your query.
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Immersive Detail View */}
-          <div ref={detailsRef} className="lg:col-span-7 bg-brand-white rounded-3xl border border-brand-charcoal/5 p-8 lg:p-12 shadow-sm space-y-10 min-h-[50vh]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedService.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-8"
-              >
-                {/* Premium Image Banner */}
-                {serviceImages[selectedService.id] && (
-                  <div className="relative w-full h-48 sm:h-[240px] rounded-2xl overflow-hidden border border-brand-charcoal/5 bg-brand-cream shadow-xs">
-                    <Image
-                      src={serviceImages[selectedService.id]}
-                      alt={selectedService.name}
-                      fill
-                      sizes="(max-w-7xl) 50vw, 100vw"
-                      className="object-cover"
-                      priority
-                    />
-                  </div>
-                )}
-
-                {/* Header */}
-                <div className="border-b border-brand-charcoal/5 pb-6 space-y-2">
-                  <div className="text-xs uppercase tracking-widest text-brand-gold font-bold">
-                    {selectedService.category} diagnostics
-                  </div>
-                  <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight text-brand-charcoal">
-                    {selectedService.name}
-                  </h2>
-                  <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed pt-1">
-                    {selectedService.overview}
-                  </p>
-                </div>
-
-                {/* Split grid: Who needs it & Benefits */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <h4 className="font-serif text-base font-semibold text-brand-charcoal flex items-center gap-x-2">
-                      <CheckCircle2 className="h-4 w-4 text-brand-emerald" />
-                      Who Requires This
-                    </h4>
-                    <ul className="space-y-2 text-xs text-brand-charcoal/70 leading-relaxed list-disc pl-4">
-                      {selectedService.whoNeedsIt.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h4 className="font-serif text-base font-semibold text-brand-charcoal flex items-center gap-x-2">
-                      <CheckCircle2 className="h-4 w-4 text-brand-emerald" />
-                      Clinical Benefits
-                    </h4>
-                    <ul className="space-y-2 text-xs text-brand-charcoal/70 leading-relaxed list-disc pl-4">
-                      {selectedService.benefits.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Guidelines Section */}
-                <div className="p-6 rounded-2xl bg-brand-cream border border-brand-charcoal/5 space-y-4">
-                  <h4 className="font-serif text-base font-semibold text-brand-charcoal flex items-center gap-x-2">
-                    <AlertCircle className="h-4 w-4 text-brand-gold" />
-                    Preparation Guidelines
-                  </h4>
-                  <ul className="space-y-2.5 text-xs text-brand-charcoal/80 leading-relaxed pl-4 list-decimal">
-                    {selectedService.prepGuidelines.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Procedure Section */}
-                <div className="space-y-4">
-                  <h4 className="font-serif text-base font-semibold text-brand-charcoal flex items-center gap-x-2">
-                    <Clock className="h-4 w-4 text-brand-emerald" />
-                    Procedure Walkthrough
-                  </h4>
-                  <div className="space-y-3 relative before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1px] before:bg-brand-emerald/10">
-                    {selectedService.procedure.map((step, idx) => (
-                      <div key={idx} className="flex gap-x-3 text-xs text-brand-charcoal/70 leading-relaxed pl-6 relative before:absolute before:left-1.5 before:top-1.5 before:w-1.5 before:h-1.5 before:rounded-full before:bg-brand-emerald">
-                        <p>{step}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* FAQs */}
-                {selectedService.faqs && selectedService.faqs.length > 0 && (
-                  <div className="border-t border-brand-charcoal/5 pt-6 space-y-4">
-                    <h4 className="font-serif text-base font-semibold text-brand-charcoal flex items-center gap-x-2">
-                      <HelpCircle className="h-4 w-4 text-brand-gold" />
-                      Common Questions
-                    </h4>
-                    <div className="space-y-4">
-                      {selectedService.faqs.map((faq, idx) => (
-                        <div key={idx} className="space-y-1.5">
-                          <h5 className="font-serif text-xs font-semibold text-brand-charcoal">
-                            {faq.question}
-                          </h5>
-                          <p className="font-sans text-[11px] text-brand-charcoal/60 leading-relaxed">
-                            {faq.answer}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Direct Action */}
-                <div className="pt-4 flex items-center justify-between border-t border-brand-charcoal/5">
-                  <p className="text-[10px] text-brand-charcoal/50 font-medium">
-                    Need immediate appointment coordination?
-                  </p>
-                  <button
-                    onClick={() => {
-                      const phoneNumber = '919360933128';
-                      const text = encodeURIComponent(`Hello Aradhiya Scans. I want to book an appointment for the "${selectedService.name}" test.`);
-                      window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank');
-                    }}
-                    className="px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider text-brand-cream bg-brand-emerald hover:bg-brand-emerald-dark transition-colors cursor-pointer"
-                  >
-                    Schedule Test
-                  </button>
-                </div>
-
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
+      {/* Actions Footer */}
+      <div className="mt-auto pt-5 border-t border-brand-charcoal/5">
+        <div className="grid grid-cols-2 gap-3 items-center">
+          <Link
+            href={`/services/${service.id}`}
+            className="w-full border border-brand-charcoal/10 hover:bg-brand-cream hover:text-brand-emerald text-brand-charcoal text-[10px] font-bold uppercase tracking-wider text-center rounded-full py-3 block transition duration-300"
+          >
+            View Detail
+          </Link>
+          <button
+            onClick={() => {
+              const phoneNumber = '919360933128';
+              const text = encodeURIComponent(`Hello Aradhiya Scans. I want to book an appointment for the "${service.name}" test.`);
+              window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank');
+            }}
+            className="w-full bg-brand-emerald hover:bg-brand-emerald-dark text-brand-cream text-[10px] font-bold uppercase tracking-wider text-center rounded-full py-3 block transition duration-300 shadow-2xs hover:shadow-sm cursor-pointer border-none"
+          >
+            Book Now
+          </button>
         </div>
       </div>
+
     </div>
   );
 }

@@ -1,0 +1,23 @@
+
+> aradhiya-scans@0.1.0 build
+> next build
+
+▲ Next.js 16.2.7 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 10.7s
+  Running TypeScript ...
+Failed to type check.
+
+./src/app/admin/page.tsx:958:14
+Type error: Cannot find name 'AlertTriangle'.
+
+  956 |         {errorMsg && (
+  957 |           <div className="mb-6 p-4 rounded-2xl border border-red-500/10 bg-red-500/5 text...
+> 958 |             <AlertTriangle className="h-4 w-4 shrink-0" />
+      |              ^
+  959 |             {errorMsg}
+  960 |           </div>
+  961 |         )}
+Next.js build worker exited with code: 1 and signal: null

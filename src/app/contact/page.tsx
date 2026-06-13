@@ -139,9 +139,9 @@ export default function ContactPage() {
                       <br />
                       39B, Theradi Kovil Street,
                       <br />
-                      Gandhi Nagar, Chidambaram - 608001,
+                      (Opp.) Venus Matriculation School,
                       <br />
-                      Tamil Nadu, India
+                      Chidambaram - 608001, Tamil Nadu, India
                     </span>
                   </li>
                   <li className="flex items-center gap-x-3">
