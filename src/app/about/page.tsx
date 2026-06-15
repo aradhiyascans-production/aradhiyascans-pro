@@ -144,6 +144,37 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* SECTION 2.5: CLINICAL LEADERSHIP */}
+          <section className="space-y-12">
+            <div className="text-center max-w-2xl mx-auto space-y-4">
+              <span className="text-xs uppercase tracking-widest text-brand-gold font-semibold">Clinical Leadership</span>
+              <h2 className="font-serif text-3xl sm:text-4xl font-medium text-brand-charcoal">
+                Our Medical Director & Chief Radiologist
+              </h2>
+              <p className="font-sans text-sm text-brand-charcoal/70 leading-relaxed">
+                All imaging scans, digital radiography, and ultrasound procedures are verified and reported by our highly qualified clinical radiologist.
+              </p>
+            </div>
+
+            <div className="max-w-2xl mx-auto bg-brand-white border border-brand-charcoal/5 rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-left relative overflow-hidden group">
+              <div className="absolute right-[-20px] top-[-20px] w-32 h-32 bg-brand-emerald/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="relative z-10 space-y-3 text-left">
+                <div>
+                  <h3 className="font-serif text-2xl font-semibold text-brand-charcoal">Dr. Anand, M.D.R.D.</h3>
+                  <p className="font-sans text-xs uppercase tracking-wider text-brand-gold font-semibold mt-1">
+                    Chief Consultant Radiologist
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-x-2 px-3 py-1.5 rounded-full border border-brand-charcoal/5 bg-brand-cream text-[10px] font-bold text-brand-charcoal/70">
+                  Medical Council Registration No: 86454
+                </div>
+                <p className="font-sans text-xs text-brand-charcoal/60 leading-relaxed font-medium">
+                  Dr. Anand is our Chief Consultant Radiologist, holding a Doctor of Medicine in Radiodiagnosis (M.D.R.D.). With extensive clinical diagnostic experience, he double-checks complex scans, obstetrics diagnostics, and radiological reports, ensuring the highest standards of accuracy for our patients.
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* SECTION 3: COMMUNITY IMPACT & QUALITY */}
           <section className="bg-brand-white rounded-3xl border border-brand-charcoal/5 p-8 lg:p-12 shadow-sm">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
