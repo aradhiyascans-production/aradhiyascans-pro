@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -13,7 +13,9 @@ import {
   Heart,
   CheckCircle2,
   Calendar,
-  Users
+  Users,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { type TestProfile } from '@/lib/types';
 import { toast } from 'sonner';
@@ -44,6 +46,26 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
   const [patientName, setPatientName] = useState('');
   const [patientPhone, setPatientPhone] = useState('');
   const [selectedService, setSelectedService] = useState('Ultrasound Scan');
+  const [pkgSlideIndex, setPkgSlideIndex] = useState(0);
+  const [isPkgSliderPaused, setIsPkgSliderPaused] = useState(false);
+
+  const pkgSlugs = ['men-s-health-check-up', 'womens-health-check-up', 'master-health-check-up'];
+  const pkgSlides = pkgSlugs.map(slug => featuredPackages.find(p => p.slug === slug)).filter(Boolean) as TestProfile[];
+  const totalPkgSlides = pkgSlides.length || 1;
+
+  const nextPkgSlide = useCallback(() => {
+    setPkgSlideIndex(prev => (prev + 1) % totalPkgSlides);
+  }, [totalPkgSlides]);
+
+  const prevPkgSlide = useCallback(() => {
+    setPkgSlideIndex(prev => (prev - 1 + totalPkgSlides) % totalPkgSlides);
+  }, [totalPkgSlides]);
+
+  useEffect(() => {
+    if (isPkgSliderPaused || totalPkgSlides <= 1) return;
+    const timer = setInterval(nextPkgSlide, 15000);
+    return () => clearInterval(timer);
+  }, [isPkgSliderPaused, totalPkgSlides, nextPkgSlide]);
 
   const handleQuickBook = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,13 +100,7 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
                   <p className="font-sans text-sm sm:text-base lg:text-lg text-brand-gold-dark font-bold uppercase tracking-wider mt-1.5">
                     {"Chidambaram's Advanced Scan, Echo & Diagnostic Pathology Laboratory"}
                   </p>
-                  <p className="font-sans text-xs sm:text-sm text-brand-emerald/90 font-bold mt-1">
-                    சிதம்பரத்தின் முதன்மை ஸ்கேன் & இரத்த பரிசோதனை நிலையம்
-                  </p>
                 </div>
-                <p className="font-sans text-xs sm:text-sm text-brand-charcoal/75 leading-relaxed mt-2">
-                  Equipped with advanced diagnostic scans, high-resolution digital X-ray, automated chemistry analyzers, and 12-lead ECG. Get accurate results double-verified by certified pathologists and radiologists. Proudly serving the people of Chidambaram & surrounding regions.
-                </p>
               </div>
 
               {/* Core Diagnostic Services in the Gap */}
@@ -95,24 +111,24 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Card 1: Ultrasound Scan */}
-                  <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
+                  <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-5 flex flex-col justify-between shadow-md hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
                     <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-brand-gold/5 rounded-full blur-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     <div>
                       {/* Diagnostic Type Tag */}
-                      <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center justify-between mb-4">
                         <span className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
                           Imaging
                         </span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-serif text-base font-semibold tracking-tight text-brand-charcoal group-hover:text-brand-emerald transition-colors leading-snug mt-2 mb-2 pr-6">
+                      <h3 className="font-serif text-base font-semibold tracking-tight text-brand-charcoal group-hover:text-brand-emerald transition-colors leading-snug mt-1 mb-2 pr-8">
                         Ultrasound Scan
                       </h3>
 
                       {/* Short Description */}
-                      <p className="text-[11px] text-brand-charcoal/65 leading-relaxed line-clamp-3 mb-4 font-medium">
+                      <p className="text-[11px] text-brand-charcoal/65 leading-relaxed line-clamp-2 mb-4 font-medium">
                         High-resolution abdominal, pelvic, and obstetric scanning utilizing safe sound waves.
                       </p>
 
@@ -126,10 +142,32 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
                           className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                         />
                       </div>
+
+                      {/* Scan Types */}
+                      <div className="space-y-2.5">
+                        <p className="text-[8px] font-bold uppercase tracking-[0.15em] text-brand-charcoal/40">Available Scans</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {['Abdomen', 'Pelvic', 'Thyroid'].map((scan) => (
+                            <span key={scan} className="text-[9px] font-semibold text-brand-charcoal/65 bg-brand-cream/60 border border-brand-charcoal/5 rounded-md px-2 py-0.5">
+                              {scan}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-2.5 pt-1">
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-brand-gold-dark" />
+                            <span className="text-[9px] font-bold text-brand-gold-dark">Same Day</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <CheckCircle2 className="h-3 w-3 text-brand-emerald" />
+                            <span className="text-[9px] font-bold text-brand-emerald">Walk-in</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Actions Footer */}
-                    <div className="mt-auto pt-3.5 border-t border-brand-charcoal/5">
+                    <div className="mt-auto pt-4 border-t border-brand-charcoal/5">
                       <div className="grid grid-cols-2 gap-2.5 items-center">
                         <Link
                           href="/services/ultrasound"
@@ -150,24 +188,24 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
                   </div>
 
                   {/* Card 2: CT Scan */}
-                  <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
+                  <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-5 flex flex-col justify-between shadow-md hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
                     <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-brand-gold/5 rounded-full blur-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     <div>
                       {/* Diagnostic Type Tag */}
-                      <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center justify-between mb-4">
                         <span className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
                           Advanced Scan
                         </span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-serif text-base font-semibold tracking-tight text-brand-charcoal group-hover:text-brand-emerald transition-colors leading-snug mt-2 mb-2 pr-6">
+                      <h3 className="font-serif text-base font-semibold tracking-tight text-brand-charcoal group-hover:text-brand-emerald transition-colors leading-snug mt-1 mb-2 pr-8">
                         CT Scan
                       </h3>
 
                       {/* Short Description */}
-                      <p className="text-[11px] text-brand-charcoal/65 leading-relaxed line-clamp-3 mb-4 font-medium">
+                      <p className="text-[11px] text-brand-charcoal/65 leading-relaxed line-clamp-2 mb-4 font-medium">
                         High-speed multi-slice scanning yielding precise skeletal and vascular views.
                       </p>
 
@@ -181,10 +219,32 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
                           className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                         />
                       </div>
+
+                      {/* Scan Types */}
+                      <div className="space-y-2.5">
+                        <p className="text-[8px] font-bold uppercase tracking-[0.15em] text-brand-charcoal/40">Available Scans</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {['Brain', 'Chest', 'Abdomen', 'Spine'].map((scan) => (
+                            <span key={scan} className="text-[9px] font-semibold text-brand-charcoal/65 bg-brand-cream/60 border border-brand-charcoal/5 rounded-md px-2 py-0.5">
+                              {scan}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-2.5 pt-1">
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-brand-gold-dark" />
+                            <span className="text-[9px] font-bold text-brand-gold-dark">Same Day</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <CheckCircle2 className="h-3 w-3 text-brand-emerald" />
+                            <span className="text-[9px] font-bold text-brand-emerald">Appointment</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Actions Footer */}
-                    <div className="mt-auto pt-3.5 border-t border-brand-charcoal/5">
+                    <div className="mt-auto pt-4 border-t border-brand-charcoal/5">
                       <div className="grid grid-cols-2 gap-2.5 items-center">
                         <Link
                           href="/services/ct-scan"
@@ -204,51 +264,161 @@ export default function HomeClient({ featuredPackages }: HomeClientProps) {
                     </div>
                   </div>
 
-                  {/* Card 3: Master Health Checkup */}
-                  <div className="bg-brand-white border border-brand-charcoal/5 rounded-3xl p-4 flex flex-col justify-between shadow-md hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300">
+                  {/* Card 3: Health Checkup Slider (Data from Firestore) */}
+                  <div
+                    className="bg-gradient-to-br from-brand-white to-brand-cream/40 border border-brand-charcoal/5 rounded-3xl p-5 flex flex-col justify-between shadow-md hover:shadow-lg hover:border-brand-gold/15 transition-all duration-300 text-left relative overflow-hidden group hover:-translate-y-1 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-brand-gold before:rounded-l-3xl before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                    onMouseEnter={() => setIsPkgSliderPaused(true)}
+                    onMouseLeave={() => setIsPkgSliderPaused(false)}
+                  >
                     <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-brand-gold/5 rounded-full blur-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
-                    
-                    <div>
-                      {/* Diagnostic Type Tag */}
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
-                          Pathology Lab
-                        </span>
+
+                    {/* Dynamic Active Discount Badge */}
+                    {(() => {
+                      const activePkg = pkgSlides[pkgSlideIndex];
+                      const activePrice = activePkg?.price;
+                      const activeDiscountPrice = activePkg?.discountPrice;
+                      const activeHasDiscount = !!activePrice && !!activeDiscountPrice && activePrice > activeDiscountPrice;
+                      const activeDiscountPercent = activeHasDiscount ? Math.round(((activePrice! - activeDiscountPrice!) / activePrice!) * 100) : 0;
+                      
+                      return activeHasDiscount ? (
+                        <div className="absolute -top-1 -right-1 h-11 w-11 flex flex-col items-center justify-center rounded-full bg-gradient-to-br from-brand-gold to-brand-gold-dark text-brand-cream text-[9px] font-bold tracking-tight shadow-md transform rotate-12 z-10 border border-brand-cream">
+                          <span>{activeDiscountPercent}%</span>
+                          <span className="text-[7px] uppercase tracking-tighter">OFF</span>
+                        </div>
+                      ) : null;
+                    })()}
+
+                    {/* Slider Navigation — Top Left of Card 3 (replacing tags) */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5">
+                          {pkgSlides.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setPkgSlideIndex(i)}
+                              className={`h-1.5 rounded-full transition-all duration-300 ${
+                                i === pkgSlideIndex ? 'w-5 bg-brand-emerald' : 'w-1.5 bg-brand-charcoal/20 hover:bg-brand-charcoal/40'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={prevPkgSlide}
+                            className="h-6 w-6 rounded-full border border-brand-charcoal/10 hover:border-brand-emerald/30 hover:bg-brand-emerald/5 flex items-center justify-center transition-all duration-200"
+                          >
+                            <ChevronLeft className="h-3 w-3 text-brand-charcoal/50" />
+                          </button>
+                          <button
+                            onClick={nextPkgSlide}
+                            className="h-6 w-6 rounded-full border border-brand-charcoal/10 hover:border-brand-emerald/30 hover:bg-brand-emerald/5 flex items-center justify-center transition-all duration-200"
+                          >
+                            <ChevronRight className="h-3 w-3 text-brand-charcoal/50" />
+                          </button>
+                        </div>
                       </div>
+                    </div>
 
-                      {/* Title */}
-                      <h3 className="font-serif text-base font-semibold tracking-tight text-brand-charcoal group-hover:text-brand-emerald transition-colors leading-snug mt-2 mb-2 pr-6">
-                        Master Health Checkup
-                      </h3>
+                    {/* Slide Content Area */}
+                    <div className="relative overflow-hidden">
+                      <div
+                        className="flex transition-transform duration-500 ease-in-out"
+                        style={{ transform: `translateX(-${pkgSlideIndex * 100}%)` }}
+                      >
+                        {pkgSlides.map((pkg) => {
+                          const slidePrice = pkg.price;
+                          const slideDiscountPrice = pkg.discountPrice;
+                          const slideHasDiscount = !!slidePrice && !!slideDiscountPrice && slidePrice > slideDiscountPrice;
+                          const slideDiscountPercent = slideHasDiscount ? Math.round(((slidePrice! - slideDiscountPrice!) / slidePrice!) * 100) : 0;
+                          const slideSavings = slideHasDiscount ? slidePrice! - slideDiscountPrice! : 0;
+                          const slideTestCount = [
+                            ...(pkg.includedCategories?.flatMap(c => c.tests || []) || []),
+                            ...(pkg.includedTests || [])
+                          ].length;
+                          const slideDuration = pkg.duration || '24h';
+                          const slideIsHome = pkg.availability === 'Home' || pkg.availability === 'Both';
 
-                      {/* Short Description */}
-                      <p className="text-[11px] text-brand-charcoal/65 leading-relaxed line-clamp-3 mb-4 font-medium">
-                        A comprehensive preventive screening program assessing vital organs and general wellness.
-                      </p>
+                          return (
+                            <div key={pkg.slug} className="w-full shrink-0">
+                              {/* Title */}
+                              <h3 className="font-serif text-base font-semibold tracking-tight text-brand-charcoal leading-snug mt-1 mb-2 pr-8">
+                                {pkg.name}
+                              </h3>
 
-                      {/* Service Clinical Image */}
-                      <div className="relative w-full h-28 rounded-2xl overflow-hidden border border-brand-charcoal/5 bg-brand-cream mb-4">
-                        <Image
-                          src="/images/premium_health_packages_v3.png"
-                          alt="Master Health Checkup"
-                          fill
-                          sizes="(max-w-7xl) 33vw, 100vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                        />
+                              {/* Description */}
+                              <p className="text-[11px] text-brand-charcoal/65 leading-relaxed line-clamp-2 mb-4 font-medium">
+                                {pkg.description}
+                              </p>
+
+                              {/* Stats Row */}
+                              <div className="flex items-center gap-2.5 mb-4">
+                                {slideTestCount > 0 && (
+                                  <div className="flex items-center gap-1.5 bg-brand-emerald/5 border border-brand-emerald/10 rounded-lg px-2.5 py-1.5">
+                                    <Activity className="h-3 w-3 text-brand-emerald" />
+                                    <span className="text-[9px] font-bold text-brand-emerald">{slideTestCount}+ Tests</span>
+                                  </div>
+                                )}
+                                <div className="flex items-center gap-1.5 bg-brand-gold/5 border border-brand-gold/10 rounded-lg px-2.5 py-1.5">
+                                  <Clock className="h-3 w-3 text-brand-gold-dark" />
+                                  <span className="text-[9px] font-bold text-brand-gold-dark">{slideDuration} Reports</span>
+                                </div>
+                              </div>
+
+                              {/* USP Checklist */}
+                              <div className="space-y-2 mb-4">
+                                {slideIsHome && (
+                                  <div className="flex items-center gap-2">
+                                    <CheckCircle2 className="h-3.5 w-3.5 text-brand-emerald shrink-0" />
+                                    <span className="text-[10px] font-semibold text-brand-charcoal/70">Free Home Sample Collection</span>
+                                  </div>
+                                )}
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-brand-emerald shrink-0" />
+                                  <span className="text-[10px] font-semibold text-brand-charcoal/70">Certified Pathologist Verified</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-brand-emerald shrink-0" />
+                                  <span className="text-[10px] font-semibold text-brand-charcoal/70">Digital Report on WhatsApp</span>
+                                </div>
+                              </div>
+
+                              {/* Price */}
+                              <div className="bg-brand-emerald/5 border border-brand-emerald/10 rounded-xl p-3">
+                                <div className="flex items-baseline gap-2">
+                                  {slideHasDiscount ? (
+                                    <>
+                                      <span className="text-xl font-bold text-brand-emerald font-serif">₹{slideDiscountPrice?.toLocaleString('en-IN')}</span>
+                                      <span className="text-xs text-brand-charcoal/40 line-through font-semibold">₹{slidePrice?.toLocaleString('en-IN')}</span>
+                                    </>
+                                  ) : slidePrice ? (
+                                    <span className="text-xl font-bold text-brand-emerald font-serif">₹{slidePrice.toLocaleString('en-IN')}</span>
+                                  ) : (
+                                    <span className="text-sm font-bold italic text-brand-charcoal/45">Price on Request</span>
+                                  )}
+                                </div>
+                                {slideHasDiscount && (
+                                  <p className="text-[8px] font-bold text-brand-emerald/70 uppercase tracking-wider mt-0.5">
+                                    Save ₹{slideSavings.toLocaleString('en-IN')} · Limited Period Offer
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
 
                     {/* Actions Footer */}
-                    <div className="mt-auto pt-3.5 border-t border-brand-charcoal/5">
+                    <div className="mt-auto pt-4 border-t border-brand-charcoal/5">
                       <div className="grid grid-cols-2 gap-2.5 items-center">
                         <Link
-                          href="/tests/master-health-check-up"
+                          href={`/tests/${pkgSlides[pkgSlideIndex]?.slug || 'master-health-check-up'}`}
                           className="w-full border border-brand-charcoal/10 hover:bg-brand-cream hover:text-brand-emerald text-brand-charcoal text-[9px] font-bold uppercase tracking-wider text-center rounded-full py-2 block transition duration-300"
                         >
                           View Detail
                         </Link>
                         <a
-                          href={`https://wa.me/919360933128?text=${encodeURIComponent("Hello Aradhiya Scans. I want to book a Master Health Checkup.")}`}
+                          href={`https://wa.me/919360933128?text=${encodeURIComponent(`Hello Aradhiya Scans. I want to book a ${pkgSlides[pkgSlideIndex]?.name || 'Health Checkup'}.`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-full bg-brand-emerald hover:bg-brand-emerald-dark text-brand-cream text-[9px] font-bold uppercase tracking-wider text-center rounded-full py-2 block transition duration-300 shadow-2xs hover:shadow-sm"
