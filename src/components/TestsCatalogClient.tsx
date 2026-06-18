@@ -180,7 +180,7 @@ export default function TestsCatalogClient({ tests, profiles, initialSearchQuery
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-1 text-[9px] font-bold text-brand-charcoal/50">
+                    <div className={`flex items-center gap-1 text-[9px] font-bold text-brand-charcoal/50 ${hasDiscount ? "mr-10 sm:mr-12" : ""}`}>
                       <Clock className="h-3 w-3 text-brand-gold" />
                       <span>{item.duration || "24h"}</span>
                     </div>
