@@ -43,8 +43,11 @@ export const metadata: Metadata = {
     title: "Aradhiya Scans & Lab | Precision Diagnostics",
     description: "Premium medical scans, blood tests, and health checkups in Chidambaram, Tamil Nadu.",
   },
+  verification: {
+    google: "bwnAqDETSI_DP6cRet8H_QhQv0MxriZUQPIpmKSygc8",
+  },
   icons: {
-    icon: "/favicon.ico"
+    icon: "/favicon.png"
   }
 };
 
