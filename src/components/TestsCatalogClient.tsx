@@ -68,11 +68,35 @@ export default function TestsCatalogClient({ tests, profiles, initialSearchQuery
     return true;
   });
 
-  // Split filtered items into packages and tests
-  const filteredPackages = filteredItems.filter(item => item.category === 'Test Profiles' || item.category === 'Laboratory Packages');
-  const filteredTests = filteredItems.filter(item => item.category !== 'Test Profiles' && item.category !== 'Laboratory Packages');
+  // Sort results to prioritize title (name) matches when searching
+  const sortedItems = [...filteredItems];
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase().trim();
+    sortedItems.sort((a, b) => {
+      const aTitleMatch = a.name.toLowerCase().includes(query);
+      const bTitleMatch = b.name.toLowerCase().includes(query);
 
-  // Get suggestions (top 5 matches) for mobile search dropdown
+      // If one matches title and the other doesn't, put the title match first
+      if (aTitleMatch && !bTitleMatch) return -1;
+      if (!aTitleMatch && bTitleMatch) return 1;
+
+      // Secondary prioritization: startsWith match first
+      if (aTitleMatch && bTitleMatch) {
+        const aStartsWith = a.name.toLowerCase().startsWith(query);
+        const bStartsWith = b.name.toLowerCase().startsWith(query);
+        if (aStartsWith && !bStartsWith) return -1;
+        if (!aStartsWith && bStartsWith) return 1;
+      }
+
+      return 0; // maintain relative order
+    });
+  }
+
+  // Split sorted items into packages and tests
+  const filteredPackages = sortedItems.filter(item => item.category === 'Test Profiles' || item.category === 'Laboratory Packages');
+  const filteredTests = sortedItems.filter(item => item.category !== 'Test Profiles' && item.category !== 'Laboratory Packages');
+
+  // Get suggestions (top 5 matches) for mobile search dropdown, prioritizing title matches
   const showSuggestions = searchQuery.trim().length >= 1;
   const matchingSuggestions = showSuggestions
     ? allItems.filter(item => {
@@ -91,7 +115,22 @@ export default function TestsCatalogClient({ tests, profiles, initialSearchQuery
         }
         
         return matchName || matchDesc || matchSubTests || matchBiomarkers;
-      }).slice(0, 5)
+      })
+      .sort((a, b) => {
+        const query = searchQuery.toLowerCase().trim();
+        const aTitleMatch = a.name.toLowerCase().includes(query);
+        const bTitleMatch = b.name.toLowerCase().includes(query);
+        if (aTitleMatch && !bTitleMatch) return -1;
+        if (!aTitleMatch && bTitleMatch) return 1;
+
+        const aStartsWith = a.name.toLowerCase().startsWith(query);
+        const bStartsWith = b.name.toLowerCase().startsWith(query);
+        if (aStartsWith && !bStartsWith) return -1;
+        if (!aStartsWith && bStartsWith) return 1;
+
+        return 0;
+      })
+      .slice(0, 5)
     : [];
 
   const renderCard = (item: MedicalTest | TestProfile) => {
